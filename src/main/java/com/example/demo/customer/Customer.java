@@ -1,18 +1,23 @@
 package com.example.demo.customer;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
+//import javax.validation.constraints.NotBlank;
 
 import java.util.UUID;
 
 @Entity
+//@JsonIgnoreProperties(value = {"id"}, allowGetters = true)
 public class Customer {
     @Id
     private UUID id;
     @NotBlank
+    @Column(nullable = false)
     private String name;
     @NotBlank
+    @Column(nullable = false, unique = true)
     private String phoneNumber;
 
     public Customer(UUID id, String name, String phoneNumber) {

@@ -34,8 +34,8 @@ class CustomerRepositoryTest {
         assertThat(customerOptional)
                 .isPresent()
                 .hasValueSatisfying(c -> {
-//                            assertThat(c.getId().equals(id));
-//                            assertThat(c.getName().equals("Rahim"));
+                            assertThat(c.getId().equals(id));
+                            assertThat(c.getName().equals("Rahim"));
                             assertThat(c).isEqualToComparingFieldByField(rahim);
                         }
                 );
