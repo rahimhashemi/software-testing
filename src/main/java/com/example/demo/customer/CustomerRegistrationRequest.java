@@ -13,11 +13,4 @@ public class CustomerRegistrationRequest {
     public Customer getCustomer() {
         return customer;
     }
-
-    @Override
-    public String toString() {
-        return "CustomerRegistrationRequest{" +
-                "customer=" + customer +
-                '}';
-    }
 }
