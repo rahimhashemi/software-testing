@@ -2,7 +2,6 @@ package com.example.demo.payment;
 
 import com.example.demo.customer.Customer;
 import com.example.demo.customer.CustomerRepository;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -37,10 +36,6 @@ class PaymentServiceTest {
                 paymentRepository,
                 customerRepository,
                 cardPaymentCharger);
-    }
-
-    @AfterEach
-    void tearDown() {
     }
 
     @Test
