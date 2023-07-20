@@ -17,7 +17,7 @@ public class Customer {
     @Column(nullable = false)
     private String name;
     @NotBlank
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, name = "PHONENUMBER")
     private String phoneNumber;
 
     public Customer(UUID id, String name, String phoneNumber) {

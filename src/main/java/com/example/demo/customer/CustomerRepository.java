@@ -12,7 +12,7 @@ public interface CustomerRepository extends CrudRepository<Customer, UUID> {
             "where phoneNumber = :phoneNumber",
             nativeQuery = true
     )
-    Optional<Customer> selectCustomerByTel(
+    Optional<Customer> selectCustomerByPhoneNumber(
             @Param("phoneNumber") String phoneNumber
     );
 

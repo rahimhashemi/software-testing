@@ -16,7 +16,7 @@ public class CustomerRegistrationService {
 
     public void registerCustomer(CustomerRegistrationRequest request) {
         String phoneNumber = request.getCustomer().getPhoneNumber();
-        Optional<Customer> customerOptional = customerRepository.selectCustomerByTel(phoneNumber);
+        Optional<Customer> customerOptional = customerRepository.selectCustomerByPhoneNumber(phoneNumber);
         if (customerOptional.isPresent()) {
             if (customerOptional.get().getName().equals(request.getCustomer().getName())) {
                 return;
