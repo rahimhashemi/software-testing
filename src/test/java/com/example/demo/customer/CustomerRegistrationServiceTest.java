@@ -48,7 +48,7 @@ class CustomerRegistrationServiceTest {
         Customer customer = new Customer(id, faker.name().fullName(), phoneNumber);
 
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(customer);
-        given(customerRepository.selectCustomerByTel(phoneNumber)).willReturn(Optional.empty());
+        given(customerRepository.selectCustomerByPhoneNumber(phoneNumber)).willReturn(Optional.empty());
 
         //when
         underTest.registerCustomer(request);
@@ -63,11 +63,10 @@ class CustomerRegistrationServiceTest {
     void itShouldSaveCustomerWhenIdIsNull() {
         //given
         String phoneNumber = faker.phoneNumber().phoneNumber();
-        UUID id = UUID.randomUUID();
         Customer customer = new Customer(null, faker.name().fullName(), phoneNumber);
 
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(customer);
-        given(customerRepository.selectCustomerByTel(phoneNumber)).willReturn(Optional.empty());
+        given(customerRepository.selectCustomerByPhoneNumber(phoneNumber)).willReturn(Optional.empty());
 
         //when
         underTest.registerCustomer(request);
@@ -76,8 +75,7 @@ class CustomerRegistrationServiceTest {
         then(customerRepository).should().save(customerArgumentCaptor.capture());
         Customer customerArgumentCaptorValue = customerArgumentCaptor.getValue();
         assertThat(customerArgumentCaptorValue).isEqualTo(customer);
-        assertThat(customerArgumentCaptorValue).isEqualToIgnoringGivenFields(customer,"id");
-		assertThat(customerArgumentCaptorValue.getId()).isNotNull();
+        assertThat(customerArgumentCaptorValue.getId()).isNotNull();
     }
 
     @Test
@@ -90,7 +88,7 @@ class CustomerRegistrationServiceTest {
         Customer customerTwo = new Customer(UUID.randomUUID(), faker.name().fullName(), phoneNumber);
 
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(customer);
-        given(customerRepository.selectCustomerByTel(phoneNumber)).willReturn(Optional.of(customerTwo));
+        given(customerRepository.selectCustomerByPhoneNumber(phoneNumber)).willReturn(Optional.of(customerTwo));
 
         //when
         //then
@@ -111,7 +109,7 @@ class CustomerRegistrationServiceTest {
         Customer customer = new Customer(id, faker.name().fullName(), phoneNumber);
 
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(customer);
-        given(customerRepository.selectCustomerByTel(phoneNumber)).willReturn(Optional.of(customer));
+        given(customerRepository.selectCustomerByPhoneNumber(phoneNumber)).willReturn(Optional.of(customer));
 
         //when
         underTest.registerCustomer(request);
