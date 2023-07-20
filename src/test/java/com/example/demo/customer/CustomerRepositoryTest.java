@@ -1,5 +1,7 @@
 package com.example.demo.customer;
 
+import com.github.javafaker.Faker;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -18,13 +20,19 @@ class CustomerRepositoryTest {
 
     @Autowired
     private CustomerRepository underTest;
+    private Faker faker;
+
+    @BeforeEach
+    void setUp() {
+        faker = new Faker();
+    }
 
     @Test
     void itShouldSelectCustomerByPhoneNumber() {
         //given
         UUID id = UUID.randomUUID();
-        String number = "0936";
-        Customer rahim = new Customer(id, "Rahim", number);
+        String number = faker.phoneNumber().phoneNumber();
+        Customer rahim = new Customer(id, faker.name().fullName(), number);
         //when
         underTest.save(rahim);
         //then
@@ -39,7 +47,7 @@ class CustomerRepositoryTest {
     @Test
     void itShouldNotSelectCustomerByPhoneNumberWhenPhoneNumberDoesNotExists() {
         //given
-        String number = "0936";
+        String number = faker.phoneNumber().phoneNumber();
         //when
         //then
         Optional<Customer> customerOptional = underTest.selectCustomerByPhoneNumber(number);
@@ -52,7 +60,7 @@ class CustomerRepositoryTest {
     void itShouldSaveCustomer() {
         //given
         UUID id = UUID.randomUUID();
-        Customer rahim = new Customer(id, "Rahim", "0935");
+        Customer rahim = new Customer(id, faker.name().fullName(), faker.phoneNumber().phoneNumber());
         //when
         underTest.save(rahim);
         //then
@@ -67,7 +75,7 @@ class CustomerRepositoryTest {
     void itShouldNotSaveCustomerByNullName() {
         //given
         UUID id = UUID.randomUUID();
-        Customer rahim = new Customer(id, null, "0935");
+        Customer rahim = new Customer(id, null, faker.phoneNumber().phoneNumber());
         //when
         //then
         assertThatThrownBy(() -> underTest.save(rahim))
@@ -79,7 +87,7 @@ class CustomerRepositoryTest {
     void itShouldNotSaveCustomerByNullPhoneNumber() {
         //given
         UUID id = UUID.randomUUID();
-        Customer rahim = new Customer(id, "alex", null);
+        Customer rahim = new Customer(id, faker.name().fullName(), null);
         //when
         //then
         assertThatThrownBy(() -> underTest.save(rahim))
@@ -91,7 +99,7 @@ class CustomerRepositoryTest {
     void itShouldNotSaveCustomerByDuplicatePhoneNumber() {
         //given
         UUID id = UUID.randomUUID();
-        Customer rahim = new Customer(id, "Rahim", "0935");
+        Customer rahim = new Customer(id, faker.name().fullName(), faker.phoneNumber().phoneNumber());
         //when
         underTest.save(rahim);
         //then
