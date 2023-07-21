@@ -1,5 +1,6 @@
 package com.example.demo.customer;
 
+import com.example.demo.utils.PhoneNumberValidator;
 import com.github.javafaker.Faker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,8 @@ class CustomerRegistrationServiceTest {
 
     @Mock
     private CustomerRepository customerRepository;
+    @Mock
+    private PhoneNumberValidator phoneNumberValidator;
     private CustomerRegistrationService underTest;
     @Captor
     private ArgumentCaptor<Customer> customerArgumentCaptor;
@@ -31,7 +34,7 @@ class CustomerRegistrationServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
-        underTest = new CustomerRegistrationService(customerRepository);
+        underTest = new CustomerRegistrationService(customerRepository, phoneNumberValidator);
         faker = new Faker();
     }
 
@@ -44,6 +47,8 @@ class CustomerRegistrationServiceTest {
 
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(customer);
         given(customerRepository.selectCustomerByPhoneNumber(phoneNumber)).willReturn(Optional.empty());
+
+        given(phoneNumberValidator.validate(phoneNumber)).willReturn(true);
 
         //when
         underTest.registerCustomer(request);
@@ -60,9 +65,10 @@ class CustomerRegistrationServiceTest {
         String phoneNumber = faker.phoneNumber().phoneNumber();
         Customer customer = new Customer(null, faker.name().fullName(), phoneNumber);
 
+        given(phoneNumberValidator.validate(phoneNumber)).willReturn(true);
+
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(customer);
         given(customerRepository.selectCustomerByPhoneNumber(phoneNumber)).willReturn(Optional.empty());
-
         //when
         underTest.registerCustomer(request);
 
@@ -82,6 +88,8 @@ class CustomerRegistrationServiceTest {
         Customer customer = new Customer(id, faker.name().fullName(), phoneNumber);
         Customer customerTwo = new Customer(UUID.randomUUID(), faker.name().fullName(), phoneNumber);
 
+        given(phoneNumberValidator.validate(phoneNumber)).willReturn(true);
+
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(customer);
         given(customerRepository.selectCustomerByPhoneNumber(phoneNumber)).willReturn(Optional.of(customerTwo));
 
@@ -92,6 +100,7 @@ class CustomerRegistrationServiceTest {
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining(String.format("phone number [%S] is taken", phoneNumber)
                 );
+
         then(customerRepository).should(never()).save(any());
     }
 
@@ -102,6 +111,8 @@ class CustomerRegistrationServiceTest {
         UUID id = UUID.randomUUID();
 
         Customer customer = new Customer(id, faker.name().fullName(), phoneNumber);
+
+        given(phoneNumberValidator.validate(phoneNumber)).willReturn(true);
 
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(customer);
         given(customerRepository.selectCustomerByPhoneNumber(phoneNumber)).willReturn(Optional.of(customer));
