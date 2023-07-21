@@ -48,7 +48,7 @@ public class PaymentIntegrationTest {
         Customer customer = new Customer(
                 customerId,
                 faker.name().fullName(),
-                faker.phoneNumber().phoneNumber());
+                "+989354532600");
 
         CustomerRegistrationRequest registrationRequest = new CustomerRegistrationRequest(customer);
 
@@ -83,8 +83,6 @@ public class PaymentIntegrationTest {
                             assertThat(p.getCurrency()).isEqualTo(currency);
                         }
                 );
-
-
     }
 
     private String objectToJson(Object object) {
